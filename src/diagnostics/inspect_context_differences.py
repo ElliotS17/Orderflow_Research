@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = ROOT / "data" / "processed" / "event_dataset_with_context.parquet"
 
 df = pd.read_parquet(DATA_PATH)

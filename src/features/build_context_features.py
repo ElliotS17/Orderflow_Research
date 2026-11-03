@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 INPUT_PATH = ROOT / "data" / "processed" / "event_dataset_exploratory.parquet"
 OUTPUT_PATH = ROOT / "data" / "processed" / "event_dataset_with_context.parquet"
 

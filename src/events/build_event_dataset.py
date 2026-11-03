@@ -8,7 +8,7 @@ import pandas as pd
 # Configuration
 # ------------------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 INPUT_PATH = (
     PROJECT_ROOT

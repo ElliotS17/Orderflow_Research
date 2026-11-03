@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = ROOT / "data" / "processed" / "event_dataset_exploratory.parquet"
 
 HORIZONS = [1, 5, 15]
