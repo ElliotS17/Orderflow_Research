@@ -48,7 +48,7 @@ The sign of `volume_imbalance` defines the current-minute order-flow direction:
 - Positive: buyer-initiated volume exceeds seller-initiated volume.
 - Negative: seller-initiated volume exceeds buyer-initiated volume.
 
-No minimum imbalance threshold is imposed.
+No minimum imbalance threshold.
 
 ## 3. Feature Specification
 
@@ -125,7 +125,7 @@ Exploratory diagnostics showed differences between buyer-dominant and seller-dom
 
 This asymmetry was not consistent across all sessions and is treated as an exploratory observation rather than an established market effect.
 
-One possible interpretation is that buying and selling pressure may translate into price movement differently. The idea that prices may rise more gradually but fall more sharply is a potential explanation for further investigation, not a demonstrated conclusion.
+One possible interpretation is that buying and selling pressure may translate into price movement differently. The idea that prices may rise more gradually but fall more sharply is one potential explanation for further investigation.
 
 ## 6. Model Comparison
 
@@ -233,7 +233,7 @@ reports/orderflow_confirmation/
 - `figures/`: exploratory visualizations.
 - `model_comparison/`: local out-of-sample prediction artifacts, including the predictions Parquet file.
 
-Current local datasets and generated prediction Parquet files are excluded from Git. Some historical archived artifacts were committed earlier and remain tracked.
+Current local datasets and generated prediction Parquet files are excluded from Git.
 
 ### Run model comparison
 
