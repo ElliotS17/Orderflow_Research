@@ -2,11 +2,11 @@
 
 ## 1. Project Objective
 
-Develop a comprehensive, hypothesis-independent universe of orderflow and market-context features using Nasdaq-100 E-mini futures (NQ) trade data.
+Develop a comprehensive universe of orderflow and market-context features using Nasdaq-100 E-mini futures (NQ) trade data.
 
 The central research question is whether observable buyer- and seller-initiated trading activity contains predictive information about subsequent price movements.
 
-The project emphasizes creative feature engineering, statistical analysis, independent research contributions, and reproducibility. The feature universe is intended to support multiple future research questions rather than being designed around one predetermined hypothesis.
+While making this project I tried emphasizing creative feature engineering, statistical analysis, and reproducibility. The feature universe is intended to support multiple future research questions rather than being designed around one predetermined hypothesis.
 
 ## 2. Dataset
 
@@ -20,9 +20,9 @@ The project emphasizes creative feature engineering, statistical analysis, indep
 - **Raw trade records:** 7,648,473
 - **Deduplicated trade records:** 7,607,886
 
-The primary research dataset uses deduplicated trade records. Original records are retained for potential sensitivity analysis.
+The primary research dataset uses deduplicated trade records. Original records are retained for potential additional analysis.
 
-Exact duplicate records were removed based on trade-message fields, excluding source-file identity. A unique execution identifier was not established, so deduplication should not be interpreted as proof that every removed record was an invalid event.
+Exact duplicate records were removed based on trade-message fields, excluding source-file identity. I could not find a unique execution identifier, so deduplication should not be interpreted as proof that every removed record was an invalid event.
 
 The trade-side field identifies aggressor direction:
 - `B`: buyer-initiated trade
@@ -55,7 +55,7 @@ The feature-universe builder is `src/features/build_feature_universe.py`.
 
 ## 4. Feature Universe: Completed
 
-The feature universe contains **95 newly engineered features across six families**, in addition to the 29 baseline columns.
+The feature universe contains **95 features across six families**, in addition to the 29 baseline columns.
 
 The final dataset contains:
 - 20,580 minute-level observations
@@ -220,7 +220,7 @@ They include:
 - Intraminute excursions and recovery/pullback measures can be reconstructed from OHLC values.
 - Aggressor VWAP difference and close-to-VWAP/POC displacements are derived from their component prices.
 
-These relationships identify exact derivations and complements. They do not automatically make the features useless: some remain intuitive summaries or useful standalone descriptors. Their derivation should be considered during later feature selection.
+These relationships identify exact derivations and complements. They do not automatically make the features useless: some remain intuitive summaries or useful standalone descriptors.
 
 ### Statistical redundancy
 
@@ -235,19 +235,7 @@ Important findings:
 - Price-level HHI and largest price-level share are related, as are trade-size HHI and top-five trade volume share.
 - Raw price-level variables are highly correlated because they share the same underlying NQ price level.
 
-High correlation does not establish that two features contain identical information. No features were removed solely because of Pearson correlation. The full 95-feature catalog is retained; a smaller modeling shortlist can be selected later based on the research question, interpretability, and out-of-sample evaluation.
-
-### Preliminary modeling priorities
-
-Some features are lower-priority candidates because they are exact derivations, complements, or strongly activity-sensitive.
-
-Examples include:
-- Choosing one of `side_switch_rate` and `directional_persistence` for a model.
-- Choosing one of `early_volume_share` and `late_volume_share` when both add no independent information.
-- Treating `directional_transition_count`, `buy_run_count`, and `sell_run_count` cautiously because they closely track activity and sequencing counts.
-- Treating `price_reversal_count` cautiously because it is strongly associated with trade count.
-
-These are modeling considerations, not reasons to delete features from the research catalog.
+High correlation does not establish that two features contain identical information. No features were removed solely because of Pearson correlation. The full 95-feature catalog was retained.
 
 ## 6. Missing Values
 
@@ -258,8 +246,6 @@ Known patterns include:
 - Baseline close-change and return measures: 15 missing values at the first observation of each session, where no prior in-session minute exists.
 - `late_early_pressure_diff`: four missing values where one half-minute has no directional trades.
 - Rolling context features: missing at the beginning of each session until the required historical window is available. Return-based context features also require an additional prior close.
-
-These missing values reflect unavailable history or undefined calculations, not necessarily zero activity or zero price movement.
 
 ## 7. Data and Methodological Limitations
 
@@ -273,7 +259,7 @@ Consequently, the research cannot directly observe:
 - Actual depth depletion
 - Hidden orders or participant identity
 
-Large trades and trade-size concentration must not be interpreted as proof of institutional activity or the number of independent participants. Individual trade records do not identify unique market participants.
+This limitation made for a interesting opportunity to attempt capturing characteristics of order flow based on trade activity rather than using level 2 data.
 
 Other limitations:
 - The sample covers 15 trading sessions, which limits the reliability of long-run estimates and time-of-day normalization.
@@ -284,9 +270,9 @@ Other limitations:
 
 ## 8. Completed Research: Order-Flow Confirmation
 
-The feature-universe development phase led to a hypothesis-driven study of short-term price continuation.
+After the feature-universe development phase I conducted a hypothesis-driven study of short-term price continuation to access how the feature families could be used together.
 
-**Research question:** When buying or selling pressure occurs, do additional characteristics of order flow—such as trade concentration, trading activity, directional sequencing, and price behavior—help predict whether prices will continue moving in that direction over the next five minutes?
+**Research question:** When buying or selling pressure occurs, do additional characteristics of order flow—such as trade concentration, trading activity, directional sequencing, and price behavior, help predict whether prices will continue moving in that direction over the next five minutes?
 
 The study used 15 trading sessions of NQ futures data from October 12–30, 2026.
 
@@ -309,7 +295,7 @@ The confirmation features did not improve out-of-sample predictive performance.
 
 Exploratory analysis identified a possible asymmetry between buyer-dominant and seller-dominant observations. This pattern was inconsistent across sessions and is treated as a potential research direction rather than an established effect.
 
-**Conclusion:** The tested order-flow confirmation features did not demonstrate incremental predictive value for five-minute price continuation in this sample.
+**Conclusion:** The tested order-flow confirmation features did not demonstrate incremental predictive value for five-minute price continuation in this sample but led to another discovery that could be pursued further in the future.
 
 For the complete methodology, results, limitations, and interpretation, see:
 
@@ -331,11 +317,11 @@ The project progressed through the following stages:
 9. Evaluate the hypothesis using chronological out-of-sample validation.
 10. Document findings, limitations, and reproducible results.
 
-**Current status:** The feature universe and the initial order-flow confirmation study are complete. The original confirmation hypothesis was not supported by the model comparison. Further research directions are documented as potential extensions, not established findings.
+**Current status:** The feature universe and the initial order-flow confirmation study are complete. The original confirmation hypothesis was not supported by the model comparison. Further research directions are documented as potential extensions.
 
 ## 10. Data and Reproducibility
 
-The research scripts and documentation are maintained in the repository. Market-data files are excluded from Git and must be obtained through authorized project access.
+The research scripts and documentation are maintained in the repository. Market-data files are excluded from Git.
 
 The hypothesis-specific research pipeline requires:
 
