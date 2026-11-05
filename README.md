@@ -282,23 +282,43 @@ Other limitations:
 - Price-path measures can be sensitive to trade-level noise and timestamp ordering.
 - Feature relationships observed in this sample should not be assumed to generalize without further testing.
 
-## 8. Research Directions Raised During Feature Exploration
+## 8. Completed Research: Order-Flow Confirmation
 
-The following are exploratory research directions, not established hypotheses or tested findings. They preserve ideas raised during the collaborative feature-design process.
+The feature-universe development phase led to a hypothesis-driven study of short-term price continuation.
 
-- **Late-minute bursts:** whether aggressive activity concentrated near the end of a minute has a different relationship with subsequent price movement than earlier activity.
-- **Concentrated versus distributed participation:** whether a similar amount of volume expressed through fewer large trades differs from volume distributed across many small trades. Trade records do not identify participants.
-- **Intraminute price path:** whether minutes with similar net buying pressure and closing displacement differ according to their internal price path, including reversals and recoveries.
-- **Late concentrated buying:** whether buying concentrated into a short late-minute interval carries different information from the same total buying pressure distributed throughout the minute.
-- **POC displacement:** whether the closing price's displacement from the minute's point of control is associated with subsequent movement.
-- **Aggressor-specific price distribution:** whether the relative execution prices of buyer- and seller-initiated trades add information beyond aggregate volume imbalance.
-- **Directional concentration interaction:** whether trade-size concentration combined with one-sided aggressor imbalance is more informative than concentration considered alone.
+**Research question:** When buying or selling pressure occurs, do additional characteristics of order flow—such as trade concentration, trading activity, directional sequencing, and price behavior—help predict whether prices will continue moving in that direction over the next five minutes?
 
-These ideas will be revisited after the feature universe is finalized and the next research question is deliberately selected.
+The study used 15 trading sessions of NQ futures data from October 12–30, 2026.
 
-## 9. Research Methodology and Next Phase
+The research pipeline:
+1. Constructed a hypothesis-specific minute-level dataset.
+2. Engineered aligned forward-return targets at one-, five-, and fifteen-minute horizons.
+3. Conducted exploratory feature and directional analysis.
+4. Compared baseline, context-adjusted, and confirmation Ridge regression models.
+5. Evaluated performance using expanding chronological out-of-sample validation.
 
-The project follows this sequence:
+### Main Findings
+
+The confirmation features did not improve out-of-sample predictive performance.
+
+| Model | MAE (bps) | OOS R² | Directional accuracy |
+|---|---:|---:|---:|
+| Baseline | 5.7222 | -0.0004 | 51.05% |
+| Context | 5.7238 | -0.0015 | 50.52% |
+| Confirmation | 5.7262 | -0.0024 | 50.43% |
+
+Exploratory analysis identified a possible asymmetry between buyer-dominant and seller-dominant observations. This pattern was inconsistent across sessions and is treated as a potential research direction rather than an established effect.
+
+**Conclusion:** The tested order-flow confirmation features did not demonstrate incremental predictive value for five-minute price continuation in this sample.
+
+For the complete methodology, results, limitations, and interpretation, see:
+
+- [Final Research Report](reports/orderflow_confirmation/final_research_report.md)
+- [Research Pipeline Documentation](src/research/README.md)
+
+## 9. Research Methodology and Project Status
+
+The project progressed through the following stages:
 
 1. Validate the underlying trade data.
 2. Construct baseline minute-level aggregations.
@@ -307,14 +327,23 @@ The project follows this sequence:
 5. Diagnose distributions, missingness, outliers, and redundancy.
 6. Finalize the feature universe.
 7. Develop a research hypothesis using the established feature catalog.
-8. Construct a hypothesis-specific dataset and future outcome variables.
-9. Evaluate the hypothesis using appropriate statistical methods and out-of-sample safeguards.
+8. Construct a hypothesis-specific dataset and forward outcome variables.
+9. Evaluate the hypothesis using chronological out-of-sample validation.
 10. Document findings, limitations, and reproducible results.
 
-**Current status:** the 95-feature universe has been engineered, validated, and saved. The next phase is research design and hypothesis development. No new hypothesis has been tested as part of the feature-universe construction.
+**Current status:** The feature universe and the initial order-flow confirmation study are complete. The original confirmation hypothesis was not supported by the model comparison. Further research directions are documented as potential extensions, not established findings.
 
-## 10. Previous Research
+## 10. Data and Reproducibility
 
-Previous exploratory work examined the relationship between strong directional orderflow, price response, and subsequent returns.
+The research scripts and documentation are maintained in the repository. Market-data files are excluded from Git and must be obtained through authorized project access.
 
-That research has been archived under `archive/previous_hypothesis/`. It is not the starting point for the current feature-universe development phase, and its exploratory findings are not treated as established conclusions.
+The hypothesis-specific research pipeline requires:
+
+```text
+data/processed/features_1min_universe.parquet
+data/processed/research_orderflow_confirmation.parquet
+```
+
+See [Research Pipeline Documentation](src/research/README.md) for reproduction commands and output descriptions.
+
+Raw and processed market data are not included in the repository.

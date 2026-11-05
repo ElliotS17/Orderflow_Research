@@ -5,3 +5,17 @@ __pycache__/
 .DS_Store
 data/raw/
 data/processed/
+
+# Local market-data and generated datasets
+*.parquet
+*.dbn.zst
+
+# Python and development artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
